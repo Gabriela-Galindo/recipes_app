@@ -10,7 +10,7 @@ function App() {
       <object
         className="rocksGlass"
         type="image/svg+xml"
-        data={ rockGlass }
+        data={ rockGlass } 
       >
         Glass
       </object>
