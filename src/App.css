@@ -15,6 +15,22 @@
   max-height: 80vh;
 }
 
+.none {
+  display: none;
+}
+
+.LoginBtn {
+  background-color: azure;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
+button {
+  border: none;
+  color: none;
+  background-color: rgba(10,23,55,0);
+}
+
 /*
 #iceLeft {
   animation: clink .8s infinite ease;
