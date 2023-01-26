@@ -45,6 +45,7 @@ function Login() {
         />
         <br />
         <button
+          className="LoginBtn"
           type="button"
           data-testid="login-submit-btn"
           disabled={ disabled }

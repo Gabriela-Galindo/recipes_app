@@ -41,3 +41,26 @@ describe('Testa a tela de Login', () => {
     userEvent.click(enterBttn);
   });
 });
+
+describe('Testa o componente Header', () => {
+  it('Testa se o Header possui um elemento Title', () => {
+    render(<App />);
+
+    const titleElement = screen.getByTestId('page-title');
+    expect(titleElement).toBeInTheDocument();
+  });
+
+  it('Testa se o Header possui uma imagem com o ícone do perfil', () => {
+    render(<App />);
+
+    const profileIcon = screen.getByTestId('profile-top-btn');
+    expect(profileIcon).toBeInTheDocument();
+  });
+
+  it('Testa se o Header possui um elemento de pesquisa', () => {
+    render(<App />);
+
+    const searchIcon = screen.getByTestId('search-top-btn');
+    expect(searchIcon).toBeInTheDocument();
+  });
+});
