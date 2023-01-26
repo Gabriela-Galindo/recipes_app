@@ -26,9 +26,9 @@
 }
 
 button {
+  background-color: rgba(10, 23, 55, 0);
   border: none;
   color: none;
-  background-color: rgba(10,23,55,0);
 }
 
 /*
