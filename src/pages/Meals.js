@@ -1,14 +1,17 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import Header from '../components/Header';
+import RenderMealCard from '../components/RenderMealCard';
+import { FetchMealsContext } from '../context/FetchMealsContext';
 
-class Meals extends Component {
-  render() {
-    return (
-      <div>
-        <Header />
-      </div>
-    );
-  }
+function Meals() {
+  const { searchMeals } = useContext(FetchMealsContext);
+
+  return (
+    <div>
+      <Header />
+      <RenderMealCard result={ searchMeals } />
+    </div>
+  );
 }
 
 export default Meals;
