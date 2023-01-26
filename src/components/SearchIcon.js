@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import searchIcon from '../images/searchIcon.svg';
-import SeachBar from './SeachBar';
+import SearchBar from './SearchBar';
 
 function SearchIcon() {
   const [showInput, setShowInput] = useState(false);
@@ -23,7 +23,7 @@ function SearchIcon() {
         />
       </button>
       <div>
-        { showInput && <SeachBar />}
+        { showInput && <SearchBar />}
       </div>
     </>
   );

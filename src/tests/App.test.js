@@ -74,3 +74,31 @@ describe('Testa o componente Header', () => {
     expect(history.location.pathname).toBe('/profile');
   });
 });
+
+describe('Testa o componente Search Bar', () => {
+  it('Testa se o componente possui um elemento de search input', () => {
+    render(<App />);
+
+    const searchInput = screen.getByTestId('search-input');
+    expect(searchInput).toBeInTheDocument();
+  });
+
+  it('Testa se o componente possui três elementos de radio input', () => {
+    render(<App />);
+
+    const radioIngredient = screen.getByTestId('ingredient-search-radio');
+    const radioNameSearch = screen.getByTestId('name-search-radio');
+    const radioFirstLetterSearch = screen.getByTestId('first-letter-search-radio');
+
+    expect(radioIngredient).toBeInTheDocument();
+    expect(radioNameSearch).toBeInTheDocument();
+    expect(radioFirstLetterSearch).toBeInTheDocument();
+  });
+
+  it('Testa se o componente possui um botão de Buscar', () => {
+    render(<App />);
+
+    const buttonSearch = screen.getByTestId('exec-search-btn');
+    expect(buttonSearch).toBeInTheDocument();
+  })
+});
