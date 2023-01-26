@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import Header from '../components/Header';
-import RenderCard from '../components/RenderCard';
+import RenderMealCard from '../components/RenderMealCard';
 import { FetchMealsContext } from '../context/FetchMealsContext';
 
 function Meals() {
@@ -9,7 +9,7 @@ function Meals() {
   return (
     <div>
       <Header />
-      <RenderCard result={ searchMeals } name="strMeal" thumb="strMealThumb" />
+      <RenderMealCard result={ searchMeals } />
     </div>
   );
 }

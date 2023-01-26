@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Header from '../components/Header';
-import RenderCard from '../components/RenderCard';
+import RenderDrinkCard from '../components/RenderDrinkCard';
 import { FetchDrinksContext } from '../context/FetchDrinksContext';
 
 function Drinks() {
@@ -9,7 +9,7 @@ function Drinks() {
   return (
     <div>
       <Header />
-      <RenderCard result={ searchDrinks } name="strMeal" thumb="strMealThumb" />
+      <RenderDrinkCard result={ searchDrinks } />
     </div>
   );
 }

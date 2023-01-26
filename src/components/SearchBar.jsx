@@ -1,14 +1,15 @@
 import React, { useState, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { FetchMealsContext } from '../context/FetchMealsContext';
 import { FetchDrinksContext } from '../context/FetchDrinksContext';
 
 function SearchBar() {
   const [inputText, setInputText] = useState('');
   const [radio, setRadio] = useState('i');
-  const { fetchMealsAPI } = useContext(FetchMealsContext);
+  const { fetchMealsAPI, searchMeals } = useContext(FetchMealsContext);
   const { fetchDrinksAPI } = useContext(FetchDrinksContext);
   const location = useLocation().pathname;
+  const history = useHistory();
 
   const handleClick = async () => {
     if (inputText.length === 0) {
@@ -18,6 +19,11 @@ function SearchBar() {
     }
     if (location === '/meals') {
       await fetchMealsAPI(radio, inputText);
+      console.log(searchMeals);
+      if (searchMeals.length === 1) {
+        const endpoint = searchMeals[0].idMeals;
+        history.push(`/meals/${endpoint}`);
+      }
     } if (location === '/drinks') {
       await fetchDrinksAPI(radio, inputText);
     }
