@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-// import renderWithRouter from './helpers/renderWithRouter';
+import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
 
 const EMAIL_INPUT_TESTID = 'email-input';
@@ -62,5 +62,15 @@ describe('Testa o componente Header', () => {
 
     const searchIcon = screen.getByTestId('search-top-btn');
     expect(searchIcon).toBeInTheDocument();
+  });
+
+  it('Testa se ao clicar no botão do ícone de perfil, é redirecionado à pagína de Perfil', () => {
+    const { history } = renderWithRouter(<App />);
+
+    const profileIcon = screen.getByTestId('profile-top-btn');
+    expect(profileIcon).toBeInTheDocument();
+
+    userEvent.click(profileIcon);
+    expect(history.location.pathname).toBe('/profile');
   });
 });
