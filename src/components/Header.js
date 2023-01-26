@@ -9,18 +9,12 @@ function Header() {
   const path = location.substring(1);
   const history = useHistory();
 
-  console.log(location)
-  // console.log(withoutSearch.includes(location))
-
-  const withoutSearch = [ '/profile', '/done-recipes', '/favorite-recipes'];
-
-  // const capitalizeFirstLetter = (string) => (string.charAt(0)
-  //   .toUpperCase() + string.slice(1)).replace('-', ' ');
+  const withoutSearch = ['/profile', '/done-recipes', '/favorite-recipes'];
 
   const capitalizeFirstLetter = (string) => {
     const espaces = string.replace('-', ' ');
     const array = espaces.split(' ');
-    for (let i = 0; i < array.length; i+= 1) {
+    for (let i = 0; i < array.length; i += 1) {
       let a = array[i];
 
       const firstLetter = a[0];
