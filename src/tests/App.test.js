@@ -100,5 +100,5 @@ describe('Testa o componente Search Bar', () => {
 
     const buttonSearch = screen.getByTestId('exec-search-btn');
     expect(buttonSearch).toBeInTheDocument();
-  })
+  });
 });
