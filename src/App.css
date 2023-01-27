@@ -53,6 +53,11 @@ button {
   font-weight: 900;
 }
 
+.footer {
+  bottom: 0;
+  position: fixed;
+}
+
 @keyframes shake {
 
   0% {

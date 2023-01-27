@@ -1,30 +1,26 @@
 import React, { useState, useContext } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { FetchMealsContext } from '../context/FetchMealsContext';
 import { FetchDrinksContext } from '../context/FetchDrinksContext';
 
 function SearchBar() {
   const [inputText, setInputText] = useState('');
   const [radio, setRadio] = useState('i');
-  const { fetchMealsAPI, searchMeals } = useContext(FetchMealsContext);
+  const { fetchMealsAPI } = useContext(FetchMealsContext);
   const { fetchDrinksAPI } = useContext(FetchDrinksContext);
   const location = useLocation().pathname;
-  const history = useHistory();
 
   const handleClick = async () => {
     if (inputText.length === 0) {
       global.alert('Your search must at least (one) character');
-    } if (radio === 'f' && inputText.length > 1) {
+    }
+    if (radio === 'f' && inputText.length > 1) {
       global.alert('Your search must have only 1 (one) character');
     }
     if (location === '/meals') {
       await fetchMealsAPI(radio, inputText);
-      console.log(searchMeals);
-      if (searchMeals.length === 1) {
-        const endpoint = searchMeals[0].idMeals;
-        history.push(`/meals/${endpoint}`);
-      }
-    } if (location === '/drinks') {
+    }
+    if (location === '/drinks') {
       await fetchDrinksAPI(radio, inputText);
     }
   };
