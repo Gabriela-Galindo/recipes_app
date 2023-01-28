@@ -6,9 +6,9 @@ export const FetchMealsContext = createContext();
 function FetchMealsProvider({ children }) {
   const [searchMeals, setSearchMeals] = useState([]);
 
-  const fetchMealsAPI = async (param1, param2) => {
+  const fetchMealsAPI = async (param1, param2 = '') => {
     let URL = '';
-    if (param1 === 'i') {
+    if (param1 === 'i' || param1 === 'c') {
       URL = `https://www.themealdb.com/api/json/v1/1/filter.php?${param1}=${param2}`;
     } else {
       URL = `https://www.themealdb.com/api/json/v1/1/search.php?${param1}=${param2}`;

@@ -11,27 +11,40 @@ function RenderMealCard({ result }) {
     const { idMeal } = result[0];
     history.push(`/meals/${idMeal}`);
   }
+  // setar um estado com o retorno da API apos o handleClick
+  // se o estado contem 1 item, a gente history push no id.
+  // caso nao, a gente vai pra pagina /meals/value
+  const handleClick = (value) => {
+    history.push(`/meals/${value}`);
+  };
 
   return (
-    <div>
+    <div
+      className=""
+    >
       {data.map((e, index) => (
-        <div
-          data-testid={ `${index}-recipe-card` }
+        <button
           key={ e.idMeal + index }
+          onClick={ () => handleClick(e.idMeal) }
         >
-          <img
-            data-testid={ `${index}-card-img` }
-            src={ e.strMealThumb }
-            alt={ e.strMeal }
-            height="50px"
-            width="50px"
-          />
-          <p
-            data-testid={ `${index}-card-name` }
+          <div
+            data-testid={ `${index}-recipe-card` }
           >
-            {e.strMeal}
-          </p>
-        </div>
+            <img
+              data-testid={ `${index}-card-img` }
+              src={ e.strMealThumb }
+              alt={ e.strMeal }
+              height="50px"
+              width="50px"
+            />
+            <p
+              data-testid={ `${index}-card-name` }
+            >
+              {e.strMeal}
+            </p>
+          </div>
+
+        </button>
       ))}
     </div>
   );

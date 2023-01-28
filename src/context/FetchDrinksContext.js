@@ -6,13 +6,14 @@ export const FetchDrinksContext = createContext();
 function FetchDrinksProvider({ children }) {
   const [searchDrinks, setSearchDrinks] = useState([]);
 
-  const fetchDrinksAPI = async (param1, param2) => {
+  const fetchDrinksAPI = async (param1, param2 = '') => {
     let URL = '';
-    if (param1 === 'i') {
+    if (param1 === 'i' || param1 === 'c') {
       URL = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?${param1}=${param2}`;
     } else {
       URL = `https://www.thecocktaildb.com/api/json/v1/1/search.php?${param1}=${param2}`;
     }
+
     const response = await fetch(URL);
     const json = await response.json();
     setSearchDrinks(json.drinks);
