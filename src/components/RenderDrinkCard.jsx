@@ -6,32 +6,42 @@ function RenderDrinkCard({ result }) {
   const noMagic12 = 12;
   const data = result.slice(0, noMagic12);
   const history = useHistory();
+  // if (result.length === 1) {
+  //   const { idDrink } = result[0];
+  //   history.push(`/drinks/${idDrink}`);
+  // }
 
-  if (result.length === 1) {
-    const { idDrink } = result[0];
-    history.push(`/drinks/${idDrink}`);
-  }
+  const handleClick = (value) => {
+    history.push(`/drinks/${value}`);
+  };
 
   return (
-    <div>
+    <div
+      className=""
+    >
       {data.map((e, index) => (
-        <div
-          data-testid={ `${index}-recipe-card` }
-          key={ e.idDrink + index }
+        <button
+          key={ index }
+          onClick={ () => handleClick(e.idDrink) }
         >
-          <img
-            data-testid={ `${index}-card-img` }
-            src={ e.strDrinkThumb }
-            alt={ e.srtDrink }
-            height="50px"
-            width="50px"
-          />
-          <p
-            data-testid={ `${index}-card-name` }
+          <div
+            data-testid={ `${index}-recipe-card` }
           >
-            { e.strDrink }
-          </p>
-        </div>
+            <img
+              data-testid={ `${index}-card-img` }
+              src={ e.strDrinkThumb }
+              alt={ e.srtDrink }
+              height="50px"
+              width="50px"
+            />
+            <p
+              data-testid={ `${index}-card-name` }
+            >
+              { e.strDrink }
+            </p>
+          </div>
+
+        </button>
       ))}
     </div>
   );
