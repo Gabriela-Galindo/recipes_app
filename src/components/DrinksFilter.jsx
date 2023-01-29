@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FetchDrinksContext } from '../context/FetchDrinksContext';
-import { FetchCategoryDrinksContext } from '../context/FetchCategoryDrinksContext';
 
 function DrinksFilter() {
-  const { searchDrinks, fetchDrinksAPI } = useContext(FetchDrinksContext);
-  const [prevClicked, setPrevCliked] = useState('All');
   const {
     searchCategory,
+    searchDrinks,
     fetchCategoryDrinksAPI,
-  } = useContext(FetchCategoryDrinksContext);
+    fetchDrinksAPI,
+  } = useContext(FetchDrinksContext);
+  const [prevClicked, setPrevCliked] = useState('All');
   const noMagic5 = 5;
   const categoryData = searchCategory.slice(0, noMagic5);
   const history = useHistory();

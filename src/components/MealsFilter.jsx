@@ -1,18 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { FetchMealsContext } from '../context/FetchMealsContext';
-import { FetchCategoryMealsContext } from '../context/FetchCategoryMealsContext';
 
 function MealsFilter() {
-  const { searchMeals, fetchMealsAPI } = useContext(FetchMealsContext);
-  const [prevClicked, setPrevCliked] = useState('All');
   const {
     searchCategory,
     fetchCategoryMealsAPI,
-  } = useContext(FetchCategoryMealsContext);
+    fetchMealsAPI,
+  } = useContext(FetchMealsContext);
+  const [prevClicked, setPrevCliked] = useState('All');
   const noMagic5 = 5;
   const categoryData = searchCategory.slice(0, noMagic5);
-  const history = useHistory();
 
   useEffect(() => {
     const fetch = async () => {
@@ -20,11 +17,6 @@ function MealsFilter() {
     };
     fetch();
   }, []);
-
-  if (searchMeals.length === 1) {
-    const { idMeal } = searchMeals[0];
-    history.push(`/Meals/${idMeal}`);
-  }
 
   const funcCategory = async (param) => {
     if (param === 'All' || param === prevClicked) {

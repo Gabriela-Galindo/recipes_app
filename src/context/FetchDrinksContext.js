@@ -5,6 +5,9 @@ export const FetchDrinksContext = createContext();
 
 function FetchDrinksProvider({ children }) {
   const [searchDrinks, setSearchDrinks] = useState([]);
+  const [searchCategory, setCategory] = useState([]);
+  const [detailsDrinks, setdetailsDrinks] = useState([]);
+  const [recomendationDrinks, setRecomendationDrinks] = useState([]);
 
   const fetchDrinksAPI = async (param1, param2 = '') => {
     let URL = '';
@@ -19,10 +22,40 @@ function FetchDrinksProvider({ children }) {
     setSearchDrinks(json.drinks);
   };
 
+  const fetchCategoryDrinksAPI = async () => {
+    const URL = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list';
+
+    const response = await fetch(URL);
+    const json = await response.json();
+    setCategory(json.drinks);
+  };
+
+  const fetchDetailsDrinks = async (param1) => {
+    const URL = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${param1}`;
+
+    const response = await fetch(URL);
+    const json = await response.json();
+    setdetailsDrinks(json.drinks);
+  };
+
+  const fetchRecomendationDrinks = async () => {
+    const URL = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+
+    const response = await fetch(URL);
+    const json = await response.json();
+    setRecomendationDrinks(json.drinks);
+  };
+
   const contextValue = useMemo(() => ({
     searchDrinks,
+    searchCategory,
+    detailsDrinks,
+    recomendationDrinks,
     fetchDrinksAPI,
-  }), [searchDrinks]);
+    fetchCategoryDrinksAPI,
+    fetchDetailsDrinks,
+    fetchRecomendationDrinks,
+  }), [searchDrinks, searchCategory, detailsDrinks, recomendationDrinks]);
 
   return (
     <FetchDrinksContext.Provider value={ contextValue }>

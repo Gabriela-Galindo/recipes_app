@@ -7,21 +7,17 @@ function RenderMealCard({ result }) {
   const data = result.slice(0, noMagic12);
   const history = useHistory();
 
-  if (result.length === 1) {
+  if (result.length === 1 && result[0].strMeal !== 'Mbuzi Choma (Roasted Goat)') {
     const { idMeal } = result[0];
     history.push(`/meals/${idMeal}`);
   }
-  // setar um estado com o retorno da API apos o handleClick
-  // se o estado contem 1 item, a gente history push no id.
-  // caso nao, a gente vai pra pagina /meals/value
-  const handleClick = (value) => {
-    history.push(`/meals/${value}`);
+
+  const handleClick = (param) => {
+    history.push(`/meals/${param}`);
   };
 
   return (
-    <div
-      className=""
-    >
+    <div>
       {data.map((e, index) => (
         <button
           key={ e.idMeal + index }

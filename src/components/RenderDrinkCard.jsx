@@ -6,19 +6,18 @@ function RenderDrinkCard({ result }) {
   const noMagic12 = 12;
   const data = result.slice(0, noMagic12);
   const history = useHistory();
-  // if (result.length === 1) {
-  //   const { idDrink } = result[0];
-  //   history.push(`/drinks/${idDrink}`);
-  // }
 
-  const handleClick = (value) => {
-    history.push(`/drinks/${value}`);
+  if (result.length === 1 && result[0].strDrink !== 'Aquamarine') {
+    const { idDrinks } = result[0];
+    history.push(`/drinks/${idDrinks}`);
+  }
+
+  const handleClick = (param) => {
+    history.push(`/drinks/${param}`);
   };
 
   return (
-    <div
-      className=""
-    >
+    <div>
       {data.map((e, index) => (
         <button
           key={ index }
