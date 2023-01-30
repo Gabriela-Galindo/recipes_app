@@ -1,14 +1,18 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Carousel } from 'react-bootstrap';
+import { useHistory, useParams } from 'react-router-dom';
 import { FetchDrinksContext } from '../context/FetchDrinksContext';
 import { FetchMealsContext } from '../context/FetchMealsContext';
 
 function DetailsDrinks() {
+  const [clickedShare, setClickedShare] = useState(false);
   const { detailsDrinks } = useContext(FetchDrinksContext);
   const {
     recomendationMeals,
     fetchRecomendationMeals,
   } = useContext(FetchMealsContext);
+  const history = useHistory();
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -16,6 +20,16 @@ function DetailsDrinks() {
     };
     fetchAPI();
   }, []);
+
+  const startRecipe = () => {
+    history.push(`/drinks/${id}/in-progress`);
+  };
+
+  const share = () => {
+    const link = `http://localhost:3000/drinks/${id}`;
+    setClickedShare(true);
+    navigator.clipboard.writeText(link);
+  };
 
   const noMagic = 6;
   const recomendation = recomendationMeals.slice(0, noMagic);
@@ -56,6 +70,18 @@ function DetailsDrinks() {
           </div>
         ))
       }
+      <button
+        data-testid="share-btn"
+        onClick={ share }
+      >
+        Compartilhar
+      </button>
+      { clickedShare && <p>Link copied!</p> }
+      <button
+        data-testid="favorite-btn"
+      >
+        Favoritar
+      </button>
       <h3>Recomendações</h3>
       <Carousel>
         {
@@ -84,6 +110,7 @@ function DetailsDrinks() {
       <button
         data-testid="start-recipe-btn"
         className="footer"
+        onClick={ startRecipe }
       >
         { getStorage === null ? 'Start Recipe' : 'Continue Recipe'}
       </button>

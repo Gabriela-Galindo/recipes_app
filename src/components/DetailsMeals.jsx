@@ -1,15 +1,19 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Carousel } from 'react-bootstrap';
+import { useHistory, useParams } from 'react-router-dom';
 import { FetchMealsContext } from '../context/FetchMealsContext';
 import { FetchDrinksContext } from '../context/FetchDrinksContext';
 
 function DetailsMeals() {
+  const [clickedShare, setClickedShare] = useState(false);
   const { detailsMeals } = useContext(FetchMealsContext);
   const {
     recomendationDrinks,
     fetchRecomendationDrinks,
   } = useContext(FetchDrinksContext);
   const getStorage = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  const history = useHistory();
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -17,6 +21,16 @@ function DetailsMeals() {
     };
     fetchAPI();
   }, []);
+
+  const startRecipe = () => {
+    history.push(`/meals/${id}/in-progress`);
+  };
+
+  const share = () => {
+    const link = `http://localhost:3000/meals/${id}`;
+    setClickedShare(true);
+    navigator.clipboard.writeText(link);
+  };
 
   const noMagic = 6;
   const recomendation = recomendationDrinks.slice(0, noMagic);
@@ -63,6 +77,18 @@ function DetailsMeals() {
           </div>
         ))
       }
+      <button
+        data-testid="share-btn"
+        onClick={ share }
+      >
+        Compartilhar
+      </button>
+      { clickedShare && <p>Link copied!</p> }
+      <button
+        data-testid="favorite-btn"
+      >
+        Favoritar
+      </button>
       <h3>Recomendações</h3>
       <Carousel>
         {
@@ -90,7 +116,8 @@ function DetailsMeals() {
       </Carousel>
       <button
         data-testid="start-recipe-btn"
-        className="footer"
+        className="startRecipe"
+        onClick={ startRecipe }
       >
         { getStorage === null ? 'Start Recipe' : 'Continue Recipe'}
       </button>
