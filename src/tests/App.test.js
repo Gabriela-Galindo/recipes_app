@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
+// import Footer from '../components/Footer';
 
 const EMAIL_INPUT_TESTID = 'email-input';
 const PASSWORD_INPUT_TESTID = 'password-input';
@@ -102,3 +103,20 @@ describe('Testa o componente Search Bar', () => {
     expect(buttonSearch).toBeInTheDocument();
   });
 });
+
+// describe('Test Footer Componet', () => {
+//   test('Footer component renders the correct buttons and click events', () => {
+//     const history = useHistory();
+//     const { getByTestId } = render(<Footer />);
+
+//     expect(getByTestId('footer')).toBeInTheDocument();
+//     expect(getByTestId('drinks-bottom-btn')).toBeInTheDocument();
+//     expect(getByTestId('meals-bottom-btn')).toBeInTheDocument();
+
+//     fireEvent.click(getByTestId('drinks-bottom-btn'));
+//     expect(history.push).toHaveBeenCalledWith('/drinks');
+
+//     fireEvent.click(getByTestId('meals-bottom-btn'));
+//     expect(history.push).toHaveBeenCalledWith('/meals');
+//   });
+// });
