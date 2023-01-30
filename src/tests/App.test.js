@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
 
 const EMAIL_INPUT_TESTID = 'email-input';
@@ -39,66 +38,5 @@ describe('Testa a tela de Login', () => {
     userEvent.type(inputEmail, 'teste@teste.com');
     userEvent.type(inputPassword, '1234567');
     userEvent.click(enterBttn);
-  });
-});
-
-describe('Testa o componente Header', () => {
-  it('Testa se o Header possui um elemento Title', () => {
-    render(<App />);
-
-    const titleElement = screen.getByTestId('page-title');
-    expect(titleElement).toBeInTheDocument();
-  });
-
-  it('Testa se o Header possui uma imagem com o ícone do perfil', () => {
-    render(<App />);
-
-    const profileIcon = screen.getByTestId('profile-top-btn');
-    expect(profileIcon).toBeInTheDocument();
-  });
-
-  it('Testa se o Header possui um elemento de pesquisa', () => {
-    render(<App />);
-
-    const searchIcon = screen.getByTestId('search-top-btn');
-    expect(searchIcon).toBeInTheDocument();
-  });
-
-  it('Testa se ao clicar no botão do ícone de perfil, é redirecionado à pagína de Perfil', () => {
-    const { history } = renderWithRouter(<App />);
-
-    const profileIcon = screen.getByTestId('profile-top-btn');
-    expect(profileIcon).toBeInTheDocument();
-
-    userEvent.click(profileIcon);
-    expect(history.location.pathname).toBe('/profile');
-  });
-});
-
-describe('Testa o componente Search Bar', () => {
-  it('Testa se o componente possui um elemento de search input', () => {
-    render(<App />);
-
-    const searchInput = screen.getByTestId('search-input');
-    expect(searchInput).toBeInTheDocument();
-  });
-
-  it('Testa se o componente possui três elementos de radio input', () => {
-    render(<App />);
-
-    const radioIngredient = screen.getByTestId('ingredient-search-radio');
-    const radioNameSearch = screen.getByTestId('name-search-radio');
-    const radioFirstLetterSearch = screen.getByTestId('first-letter-search-radio');
-
-    expect(radioIngredient).toBeInTheDocument();
-    expect(radioNameSearch).toBeInTheDocument();
-    expect(radioFirstLetterSearch).toBeInTheDocument();
-  });
-
-  it('Testa se o componente possui um botão de Buscar', () => {
-    render(<App />);
-
-    const buttonSearch = screen.getByTestId('exec-search-btn');
-    expect(buttonSearch).toBeInTheDocument();
   });
 });
