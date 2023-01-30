@@ -62,6 +62,13 @@ button {
   position: fixed;
 }
 
+.startRecipe {
+  bottom: 0;
+  left: 50%;
+  position: fixed;
+  top: 98%;
+}
+
 @keyframes shake {
 
   0% {

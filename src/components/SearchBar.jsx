@@ -17,12 +17,8 @@ function SearchBar() {
     if (radio === 'f' && inputText.length > 1) {
       global.alert('Your search must have only 1 (one) character');
     }
-    if (location === '/meals') {
-      await fetchMealsAPI(radio, inputText);
-    }
-    if (location === '/drinks') {
-      await fetchDrinksAPI(radio, inputText);
-    }
+    if (location === '/meals') await fetchMealsAPI(radio, inputText);
+    if (location === '/drinks') await fetchDrinksAPI(radio, inputText);
   };
 
   return (
