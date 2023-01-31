@@ -1,28 +1,29 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Carousel } from 'react-bootstrap';
+// import { Carousel } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import { FetchMealsContext } from '../context/FetchMealsContext';
-import { FetchDrinksContext } from '../context/FetchDrinksContext';
+// import { FetchDrinksContext } from '../context/FetchDrinksContext';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+// import Recomendations from './Recomendations';
 
 function DetailsMeals() {
   const [clickedShare, setClickedShare] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const { detailsMeals } = useContext(FetchMealsContext);
-  const {
-    recomendationDrinks,
-    fetchRecomendationDrinks,
-  } = useContext(FetchDrinksContext);
+  // const {
+  //   recomendationDrinks,
+  //   fetchRecomendationDrinks,
+  // } = useContext(FetchDrinksContext);
   const getStorage = JSON.parse(localStorage.getItem('inProgressRecipes'));
   const history = useHistory();
   const { id } = useParams();
 
   useEffect(() => {
-    const fetchAPI = async () => {
-      await fetchRecomendationDrinks();
-    };
-    fetchAPI();
+    // const fetchAPI = async () => {
+    //   await fetchRecomendationDrinks();
+    // };
+    // fetchAPI();
     const favoritesRecip = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
     const favorite = favoritesRecip.some((e) => e.id === id);
     setIsFavorite(favorite);
@@ -58,8 +59,8 @@ function DetailsMeals() {
     setIsFavorite(!isFavorite);
   };
 
-  const noMagic = 6;
-  const recomendation = recomendationDrinks.slice(0, noMagic);
+  // const noMagic = 6;
+  // const recomendation = recomendationDrinks.slice(0, noMagic);
 
   return (
     <div>
@@ -121,8 +122,9 @@ function DetailsMeals() {
           </div>
         ))
       }
+      {/* <Recomendations /> */}
       <h3>Recomendações</h3>
-      <Carousel>
+      {/* <Carousel>
         {
           recomendation.map((elem, index) => (
             <Carousel.Item
@@ -145,7 +147,7 @@ function DetailsMeals() {
             </Carousel.Item>
           ))
         }
-      </Carousel>
+      </Carousel> */}
       <button
         data-testid="start-recipe-btn"
         className="startRecipe"

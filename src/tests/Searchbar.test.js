@@ -1,78 +1,135 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import SearchBar from '../components/SearchBar';
+import { screen, fireEvent } from '@testing-library/react';
+import renderWithRouter from './helpers/renderWithRouter';
+import SearchIcon from '../components/SearchIcon';
 
-const execSearch = getByTestId('exec-search-btn');
+const oneChar = 'Your search must at least (one) character';
+const searchInput = 'search-input';
+const buttonSearch = 'exec-search-btn';
+const searchIcon = 'search-top-btn';
+const radioIngredient = 'ingredient-search-radio';
+const radioNameSearch = 'name-search-radio';
+const radioFirstLetterSearch = 'first-letter-search-radio';
 
-describe('Test SearchBar Component', () => {
-  it('should call the global alert when inputText is empty', () => {
+describe('Testa o componente Search Bar', () => {
+  it('Testa se o componente possui um elemento de search input', () => {
+    renderWithRouter(<SearchIcon />, { initialEntries: ['/meals'] });
+    const icon = screen.getByTestId(searchIcon);
+    fireEvent.click(icon);
+    const input = screen.getByTestId(searchInput);
+    expect(input).toBeInTheDocument();
+  });
+
+  it('Testa se o componente possui três elementos de radio input', () => {
+    renderWithRouter(<SearchIcon />, { initialEntries: ['/meals'] });
+    const icon = screen.getByTestId(searchIcon);
+    fireEvent.click(icon);
+    const ingredient = screen.getByTestId(radioIngredient);
+    const name = screen.getByTestId(radioNameSearch);
+    const firstletter = screen.getByTestId(radioFirstLetterSearch);
+    expect(ingredient).toBeInTheDocument();
+    expect(name).toBeInTheDocument();
+    expect(firstletter).toBeInTheDocument();
+  });
+
+  it('Testa se o componente possui um botão de Buscar', () => {
+    renderWithRouter(<SearchIcon />, { initialEntries: ['/meals'] });
+    const icon = screen.getByTestId(searchIcon);
+    fireEvent.click(icon);
+    const search = screen.getByTestId(buttonSearch);
+    expect(search).toBeInTheDocument();
+  });
+
+  // it('Testa se dispara um alert quando o input está vazio', async () => {
+  //   global.alert = jest.fn();
+  //   renderWithRouter(<SearchIcon />, { initialEntries: ['/meals'] });
+  //   const input = screen.getByTestId(searchInput);
+  //   const search = screen.getByTestId(buttonSearch);
+  //   fireEvent.change(input, { target: { value: '' } });
+  //   fireEvent.click(search);
+
+  //   expect(global.alert).toHaveBeenCalledWith(oneChar);
+  // });
+
+  it('Testa se dispara um alert quando a pesquisa é pela primeira letra, mas há mais de uma letra no input', async () => {
     global.alert = jest.fn();
-    render(<SearchBar />);
+    renderWithRouter(<SearchIcon />, { initialEntries: ['/meals'] });
+    const icon = screen.getByTestId(searchIcon);
+    fireEvent.click(icon);
 
-    act(() => {
-      fireEvent.click(execSearch);
-    });
+    const input = screen.getByTestId(searchInput);
+    const firstLetter = screen.getByTestId(radioFirstLetterSearch);
+    const searchButton = screen.getByTestId(buttonSearch);
+    fireEvent.change(input, { target: { value: 'ab' } });
+    fireEvent.click(firstLetter);
+    fireEvent.click(searchButton);
 
-    expect(global.alert).toHaveBeenCalled();
+    expect(global.alert).toHaveBeenCalledWith(
+      'Your search must have only 1 (one) character',
+    );
   });
 
-  it('should call the global alert when radio is "f" and inputText has more than 1 character', () => {
+  test('Testa se dispara um alert quando o input de nome está vazio', async () => {
     global.alert = jest.fn();
-    const { getByTestId } = render(<SearchBar />);
-    const firstLetterTypeRadio = getByTestId('first-letter-type');
-    const inputText = getByTestId('search-input');
+    renderWithRouter(<SearchIcon />, { initialEntries: ['/meals'] });
+    const icon = screen.getByTestId(searchIcon);
+    fireEvent.click(icon);
+    const input = screen.getByTestId(searchInput);
+    const name = screen.getByTestId(radioNameSearch);
+    const searchButton = screen.getByTestId(buttonSearch);
 
-    act(() => {
-      fireEvent.click(firstLetterTypeRadio);
-    });
+    fireEvent.change(input, { target: { value: '' } });
+    fireEvent.click(name);
+    fireEvent.click(searchButton);
 
-    act(() => {
-      fireEvent.change(inputText, { target: { value: 'ab' } });
-      fireEvent.click(execSearch);
-    });
-
-    expect(global.alert).toHaveBeenCalled();
+    expect(global.alert).toHaveBeenCalledWith(oneChar);
   });
 
-  it('should call fetchMealsAPI when location is "/meals"', async () => {
-    const mockFetchMealsAPI = jest.fn();
-    jest.spyOn(React, 'useContext').mockImplementationOnce(() => ({
-      fetchMealsAPI: mockFetchMealsAPI,
-    }));
+  it('Testa se dispara um alert quando o input de ingrediente está vazio', async () => {
+    global.alert = jest.fn();
+    renderWithRouter(<SearchIcon />, { initialEntries: ['/meals'] });
+    const icon = screen.getByTestId(searchIcon);
+    fireEvent.click(icon);
+    const input = screen.getByTestId(searchInput);
+    const ingredient = screen.getByTestId(radioIngredient);
+    const searchButton = screen.getByTestId(buttonSearch);
 
-    jest.spyOn(ReactRouterDom, 'useLocation').mockImplementationOnce(() => ({
-      pathname: '/meals',
-    }));
+    fireEvent.change(input, { target: { value: '' } });
+    fireEvent.click(ingredient);
+    fireEvent.click(searchButton);
 
-    const { getByTestId } = render(<SearchBar />);
-    const ingredientSearchRadio = getByTestId('ingredient-search');
-
-    act(() => {
-      fireEvent.click(ingredientSearchRadio);
-      fireEvent.click(execSearch);
-    });
-
-    expect(mockFetchMealsAPI).toHaveBeenCalled();
+    expect(global.alert).toHaveBeenCalledWith(oneChar);
   });
 
-  it('should call fetchDrinksAPI when location is "/drinks"', async () => {
-    const mockFetchDrinksAPI = jest.fn();
-    jest.spyOn(React, 'useContext').mockImplementationOnce(() => ({
-      fetchDrinksAPI: mockFetchDrinksAPI,
-    }));
+  it('Testa se a renderiza os botoes vindo da página /drinks', async () => {
+    renderWithRouter(<SearchIcon />, { initialEntries: ['/drinks'] });
+    const icon = screen.getByTestId(searchIcon);
+    fireEvent.click(icon);
+    const input = screen.getByTestId(searchInput);
+    const ingredient = screen.getByTestId(radioIngredient);
+    const searchButton = screen.getByTestId(buttonSearch);
 
-    jest.spyOn(ReactRouterDom, 'useLocation').mockImplementationOnce(() => ({
-      pathname: '/drinks',
-    }));
+    fireEvent.change(input, { target: { value: '' } });
+    fireEvent.click(ingredient);
+    fireEvent.click(searchButton);
 
-    const { getByTestId } = render(<SearchBar />);
-    const ingredientSearchRadio = getByTestId('ingredient-search');
+    expect(global.alert).toHaveBeenCalledWith(oneChar);
+  });
 
-    act(() => {
-      fireEvent.click(ingredientSearchRadio);
-      fireEvent.click(execSearch);
-    });
+  it('Testa se a renderiza os botoes vindo da página /drinks', async () => {
+    renderWithRouter(<SearchIcon />, { initialEntries: ['/drinks'] });
+    const icon = screen.getByTestId(searchIcon);
+    fireEvent.click(icon);
 
-    expect(mockFetchDrinksAPI).toHaveBeenCalled();
+    const input = screen.getByTestId(searchInput);
+    const firstLetter = screen.getByTestId(radioFirstLetterSearch);
+    const searchButton = screen.getByTestId(buttonSearch);
+    fireEvent.change(input, { target: { value: 'ab' } });
+    fireEvent.click(firstLetter);
+    fireEvent.click(searchButton);
+
+    expect(global.alert).toHaveBeenCalledWith(
+      'Your search must have only 1 (one) character',
+    );
   });
 });
