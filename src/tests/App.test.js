@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
+// import Footer from '../components/Footer';
 
 const EMAIL_INPUT_TESTID = 'email-input';
 const PASSWORD_INPUT_TESTID = 'password-input';

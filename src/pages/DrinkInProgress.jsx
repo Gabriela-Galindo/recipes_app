@@ -6,7 +6,7 @@ import { FetchMealsContext } from '../context/FetchMealsContext';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
-function DetailsDrinks() {
+function RecipeInProgress() {
   const [clickedShare, setClickedShare] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const { detailsDrinks } = useContext(FetchDrinksContext);
@@ -28,7 +28,7 @@ function DetailsDrinks() {
   }, []);
 
   const startRecipe = () => {
-    history.push(`/drinks/${id}/in-progress`);
+    history.push('/done-recipes');
   };
 
   const share = () => {
@@ -144,10 +144,10 @@ function DetailsDrinks() {
         className="startRecipe"
         onClick={ startRecipe }
       >
-        { getStorage === null ? 'Start Recipe' : 'Continue Recipe'}
+        { getStorage === null ? 'Start Recipe' : 'Continue Recipe' }
       </button>
     </div>
   );
 }
 
-export default DetailsDrinks;
+export default RecipeInProgress;

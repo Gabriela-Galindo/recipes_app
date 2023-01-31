@@ -6,10 +6,11 @@ import Login from './pages/Login';
 import Meals from './pages/Meals';
 import Drinks from './pages/Drinks';
 import Profile from './pages/Profile';
-import DoneRecipes from './pages/Done-Recipes';
-import FavoriteRecipes from './pages/Favorite-recipes';
+import DoneRecipes from './pages/DoneRecipes';
+import FavoriteRecipes from './pages/FavoriteRecipes';
 import RecipeDetails from './pages/RecipeDetails';
-import RecipeInProgress from './pages/RecipeInProgress';
+import DrinkInProgress from './pages/DrinkInProgress';
+import MealInProgress from './pages/MealInProgress';
 
 function App() {
   return (
@@ -26,13 +27,13 @@ function App() {
           <Route exact path="/meals/:id" component={ RecipeDetails } />
           <Route
             exact
-            path="/meals/:id-da-receita/in-progress"
-            component={ RecipeInProgress }
+            path="/meals/:id/in-progress"
+            component={ MealInProgress }
           />
           <Route
             exact
-            path="/drinks/:id-da-receita/in-progress"
-            component={ RecipeInProgress }
+            path="/drinks/:id/in-progress"
+            component={ DrinkInProgress }
           />
         </Switch>
       </BrowserRouter>
