@@ -6,23 +6,6 @@ import Header from '../components/Header';
 
 const profile = 'profile-top-btn';
 
-// describe('Test Header component', () => {
-//   beforeEach(() => {
-//     const setLocalStorage = (id, data) => {
-//       window.localStorage.setItem(id, JSON.stringify(data));
-//       return data;
-//     };
-//     jest.spyOn(global, 'fetch');
-//     global.fetch.mockResolvedValue({
-//       json: jest.fn().mockResolvedValue(setLocalStorage('user', 'teste@teste.com')),
-//     });
-//   });
-
-//   afterEach(() => {
-//     global.fetch.mockClear();
-//   });
-// });
-
 describe('Testa o componente Header', () => {
   it('Testa se o Header possui um elemento Title', () => {
     renderWithRouter(<Header />, { initialEntries: ['/meals'] });

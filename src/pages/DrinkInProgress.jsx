@@ -6,7 +6,7 @@ import { FetchMealsContext } from '../context/FetchMealsContext';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
-function RecipeInProgress() {
+function DrinkInProgress() {
   const [clickedShare, setClickedShare] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const { detailsDrinks } = useContext(FetchDrinksContext);
@@ -150,4 +150,4 @@ function RecipeInProgress() {
   );
 }
 
-export default RecipeInProgress;
+export default DrinkInProgress;

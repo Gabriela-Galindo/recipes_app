@@ -16,10 +16,13 @@ function FetchDrinksProvider({ children }) {
     } else {
       URL = `https://www.thecocktaildb.com/api/json/v1/1/search.php?${param1}=${param2}`;
     }
-
-    const response = await fetch(URL);
-    const json = await response.json();
-    setSearchDrinks(json.drinks);
+    try {
+      const response = await fetch(URL);
+      const json = await response.json();
+      setSearchDrinks(json.drinks);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const fetchCategoryDrinksAPI = async () => {

@@ -5,6 +5,7 @@ import { FetchMealsContext } from '../context/FetchMealsContext';
 import { FetchDrinksContext } from '../context/FetchDrinksContext';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+// import Recomendations from './Recomendations';
 
 function DetailsMeals() {
   const [clickedShare, setClickedShare] = useState(false);
@@ -121,6 +122,7 @@ function DetailsMeals() {
           </div>
         ))
       }
+      {/* <Recomendations /> */}
       <h3>Recomendações</h3>
       <Carousel>
         {
