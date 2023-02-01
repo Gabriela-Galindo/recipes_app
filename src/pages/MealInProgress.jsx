@@ -6,7 +6,7 @@ import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
 function MealInProgress() {
   const [clickedShare, setClickedShare] = useState(false);
-  const [allCheckboxes, setAllCheckboxes] = useState({});
+  const [allCheckboxes, setAllCheckboxes] = useState([]);
   // const [isDisabled, setIsDisabled] = useState(true);
   // const [totalChecked, setTotalChecked] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -32,8 +32,8 @@ function MealInProgress() {
     // const inProgressRecipes = JSON
     //   .parse(localStorage.getItem('inProgressRecipes') || '[]');
     // inProgressRecipes.push(allCheckboxes);
-    // localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
-    console.log(allCheckboxes);
+    localStorage.setItem('inProgressRecipes', JSON.stringify(allCheckboxes));
+    // console.log(allCheckboxes);
   }, [allCheckboxes]);
 
   const finishRecipe = () => {
@@ -79,13 +79,29 @@ function MealInProgress() {
       ...allCheckboxes,
       [target.id]: target.checked,
     });
-    const inProgressRecipes = JSON
-      .parse(localStorage.getItem('inProgressRecipes') || '[]');
-    inProgressRecipes.push({ [id]: [{
-      ...allCheckboxes,
-      [target.id]: target.checked,
-    }] });
-    localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
+    // let elementos = [];
+    // const inProgressRecipes = JSON
+    //   .parse(localStorage.getItem('inProgressRecipes') || '[]');
+    // inProgressRecipes.forEach((element) => {
+    //   if (element[id]) {
+    //     console.log('ACHEI');
+    //     inProgressRecipes.push(...inProgressRecipes, {
+    //       ...allCheckboxes,
+    //       [target.id]: target.checked,
+    //     });
+    //   } else {
+    //     console.log('não achei ainda');
+    //     inProgressRecipes.push({ [id]: {
+    //       ...allCheckboxes,
+    //       [target.id]: target.checked,
+    //     } });
+    //   }
+    // });
+    // inProgressRecipes.push(...inProgressRecipes, {
+    //   ...allCheckboxes,
+    //   [target.id]: target.checked,
+    // });
+    // localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
   };
 
   return (
