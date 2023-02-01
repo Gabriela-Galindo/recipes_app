@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
-import DrinksFilter from '../components/DrinksFilter';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
-import RenderDrinkCard from '../components/RenderDrinkCard';
+import Footer from './Footer';
+import Header from './Header';
+import DrinksFilter from './DrinksFilter';
+import RenderDrinkCard from './RenderDrinkCard';
 import { FetchDrinksContext } from '../context/FetchDrinksContext';
 
 function Drinks() {
@@ -15,19 +15,13 @@ function Drinks() {
     fetch();
   }, []);
 
-  const card = (
-    <div>
-      <DrinksFilter />
-      <RenderDrinkCard result={ searchDrinks } />
-    </div>
-  );
-
   return (
     <div>
       <Header />
+      <DrinksFilter />
       { searchDrinks === null
         ? global.alert('Sorry, we haven\'t found any recipes for these filters.')
-        : card }
+        : <RenderDrinkCard result={ searchDrinks } />}
       <Footer />
     </div>
   );

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
-import MealsFilter from '../components/MealsFilter';
-import RenderMealCard from '../components/RenderMealCard';
+import Footer from './Footer';
+import Header from './Header';
+import MealsFilter from './MealsFilter';
+import RenderMealCard from './RenderMealCard';
 import { FetchMealsContext } from '../context/FetchMealsContext';
 
 function Meals() {
