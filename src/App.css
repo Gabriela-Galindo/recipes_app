@@ -69,6 +69,14 @@ button {
   top: 98%;
 }
 
+.ingredient-checked {
+  text-decoration: line-through solid rgb(0, 0, 0);
+}
+
+input[type='checkbox']:checked label {
+  text-decoration: line-through solid rgb(0, 0, 0);
+}
+
 @keyframes shake {
 
   0% {

@@ -6,6 +6,7 @@ import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
 function DrinkInProgress() {
   const [clickedShare, setClickedShare] = useState(false);
+  const [allCheckboxes, setAllCheckboxes] = useState([]);
   // const [isDisabled, setIsDisabled] = useState(true);
   // const [totalChecked, setTotalChecked] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -60,6 +61,15 @@ function DrinkInProgress() {
   //     if (totalChecked >= noMagic4) setIsDisabled(false);
   //   };
 
+  const handleCheckboxChange = ({ target }) => {
+    if (allCheckboxes.includes(target.id)) {
+      const newCheckboxes = allCheckboxes.filter((e) => e !== target.id);
+      setAllCheckboxes(newCheckboxes);
+    } else {
+      setAllCheckboxes([...allCheckboxes, target.id]);
+    }
+  };
+
   return (
     <div>
       {
@@ -87,9 +97,13 @@ function DrinkInProgress() {
                   <label
                     data-testid={ `${i}-ingredient-step` }
                     htmlFor={ `${i}-ingredient-name-and-measure` }
+                    className={ allCheckboxes
+                      .includes(`${i}-ingredient-name-and-measure`)
+                      ? 'ingredient-checked' : '' }
                   >
                     <input
                       id={ `${i}-ingredient-name-and-measure` }
+                      onChange={ handleCheckboxChange }
                       type="checkbox"
                       data-testid={ `${i}-ingredient-name-and-measure` }
                     />
