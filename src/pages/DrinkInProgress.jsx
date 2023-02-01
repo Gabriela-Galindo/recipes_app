@@ -1,25 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Carousel } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import { FetchDrinksContext } from '../context/FetchDrinksContext';
-import { FetchMealsContext } from '../context/FetchMealsContext';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
 function DrinkInProgress() {
   const [clickedShare, setClickedShare] = useState(false);
+  // const [isDisabled, setIsDisabled] = useState(true);
+  // const [totalChecked, setTotalChecked] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
-  const { detailsDrinks } = useContext(FetchDrinksContext);
-  const {
-    recomendationMeals,
-    fetchRecomendationMeals,
-  } = useContext(FetchMealsContext);
+  const { detailsDrinks, fetchDetailsDrinks } = useContext(FetchDrinksContext);
   const history = useHistory();
   const { id } = useParams();
 
   useEffect(() => {
     const fetchAPI = async () => {
-      await fetchRecomendationMeals();
+      await fetchDetailsDrinks(id);
     };
     fetchAPI();
     const favoritesRecip = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
@@ -27,7 +23,7 @@ function DrinkInProgress() {
     setIsFavorite(favorite);
   }, []);
 
-  const startRecipe = () => {
+  const finishRecipe = () => {
     history.push('/done-recipes');
   };
 
@@ -57,9 +53,12 @@ function DrinkInProgress() {
     setIsFavorite(!isFavorite);
   };
 
-  const noMagic = 6;
-  const recomendation = recomendationMeals.slice(0, noMagic);
-  const getStorage = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  //   const handleCheck = ({ target }) => {
+  //     const noMagic4 = 4;
+  //     if (target.checked) setTotalChecked(totalChecked + 1);
+  //     else setTotalChecked(totalChecked - 1);
+  //     if (totalChecked >= noMagic4) setIsDisabled(false);
+  //   };
 
   return (
     <div>
@@ -84,11 +83,18 @@ function DrinkInProgress() {
                 }
                 return acc;
               }, []).map((e, i) => (
-                <li
-                  key={ i }
-                  data-testid={ `${i}-ingredient-name-and-measure` }
-                >
-                  {`${e} - ${elem[`strMeasure${i + 1}`]}`}
+                <li key={ i }>
+                  <label
+                    data-testid={ `${i}-ingredient-step` }
+                    htmlFor={ `${i}-ingredient-name-and-measure` }
+                  >
+                    <input
+                      id={ `${i}-ingredient-name-and-measure` }
+                      type="checkbox"
+                      data-testid={ `${i}-ingredient-name-and-measure` }
+                    />
+                    {`${e} - ${elem[`strMeasure${i + 1}`]}`}
+                  </label>
                 </li>
               ))}
             </ul>
@@ -114,37 +120,13 @@ function DrinkInProgress() {
           </div>
         ))
       }
-      <h3>Recomendações</h3>
-      <Carousel>
-        {
-          recomendation.map((elem, index) => (
-            <Carousel.Item
-              key={ elem + index }
-            >
-              <img
-                data-testid={ `${index}-recommendation-card` }
-                src={ elem.strMealThumb }
-                alt={ elem.strMeal }
-                width="100px"
-                height="100px"
-              />
-              <Carousel.Caption>
-                <h3
-                  data-testid={ `${index}-recommendation-title` }
-                >
-                  {elem.strMeal}
-                </h3>
-              </Carousel.Caption>
-            </Carousel.Item>
-          ))
-        }
-      </Carousel>
       <button
-        data-testid="start-recipe-btn"
-        className="startRecipe"
-        onClick={ startRecipe }
+        data-testid="finish-recipe-btn"
+        className="finishRecipe"
+        // disabled={ isDisabled }
+        onClick={ finishRecipe }
       >
-        { getStorage === null ? 'Start Recipe' : 'Continue Recipe' }
+        Finish Recipe
       </button>
     </div>
   );

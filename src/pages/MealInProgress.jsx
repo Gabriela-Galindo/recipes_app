@@ -6,15 +6,16 @@ import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
 function MealInProgress() {
   const [clickedShare, setClickedShare] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(true);
-  const [totalChecked, setTotalChecked] = useState(0);
+  const [allCheckboxes, setAllCheckboxes] = useState({});
+  // const [isDisabled, setIsDisabled] = useState(true);
+  // const [totalChecked, setTotalChecked] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const { detailsMeals, fetchDetailsMeals } = useContext(FetchMealsContext);
   // const getStorage = JSON.parse(localStorage.getItem('inProgressRecipes'));
   const history = useHistory();
   const { id } = useParams();
-  console.log(id);
-  console.log(detailsMeals);
+  // console.log(id);
+  // console.log(detailsMeals);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -26,7 +27,17 @@ function MealInProgress() {
     setIsFavorite(favorite);
   }, []);
 
+  useEffect(() => {
+    // const recipeId = id;
+    // const inProgressRecipes = JSON
+    //   .parse(localStorage.getItem('inProgressRecipes') || '[]');
+    // inProgressRecipes.push(allCheckboxes);
+    // localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
+    console.log(allCheckboxes);
+  }, [allCheckboxes]);
+
   const finishRecipe = () => {
+    // req 43 - usar a lógica do botão de favoritar para salvar as receitas feitas no localStorage
     history.push('/done-recipes');
   };
 
@@ -56,12 +67,26 @@ function MealInProgress() {
     setIsFavorite(!isFavorite);
   };
 
-  //   const handleCheck = ({ target }) => {
-  //     const noMagic4 = 4;
-  //     if (target.checked) setTotalChecked(totalChecked + 1);
-  //     else setTotalChecked(totalChecked - 1);
-  //     if (totalChecked >= noMagic4) setIsDisabled(false);
-  //   };
+  // const handleCheck = ({ target }) => {
+  //   const noMagic4 = 4;
+  //   if (target.checked) setTotalChecked(totalChecked + 1);
+  //   else setTotalChecked(totalChecked - 1);
+  //   if (totalChecked >= noMagic4) setIsDisabled(false);
+  // };
+
+  const handleCheckboxChange = ({ target }) => {
+    setAllCheckboxes({
+      ...allCheckboxes,
+      [target.id]: target.checked,
+    });
+    const inProgressRecipes = JSON
+      .parse(localStorage.getItem('inProgressRecipes') || '[]');
+    inProgressRecipes.push({ [id]: [{
+      ...allCheckboxes,
+      [target.id]: target.checked,
+    }] });
+    localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
+  };
 
   return (
     <div>
@@ -77,27 +102,31 @@ function MealInProgress() {
             />
             <h1 data-testid="recipe-title">{ elem.strMeal }</h1>
             <h3 data-testid="recipe-category">{ elem.strCategory }</h3>
-            {Object.keys(elem).reduce((acc, cur) => {
-              if (cur.includes('Ingredient')
-              && elem[cur] !== ''
-              && elem[cur] !== null) {
-                return [...acc, elem[cur]];
-              }
-              return acc;
-            }, []).map((e, i) => (
-              <li key={ i }>
-                <label
-                  htmlFor={ `${i}-ingredient-name-and-measure` }
-                >
-                  <input
-                    id={ `${i}-ingredient-name-and-measure` }
-                    type="checkbox"
-                    data-testid={ `${i}-ingredient-name-and-measure` }
-                  />
-                  {`${e} - ${elem[`strMeasure${i + 1}`]}`}
-                </label>
-              </li>
-            ))}
+            <ul>
+              {Object.keys(elem).reduce((acc, cur) => {
+                if (cur.includes('Ingredient')
+                && elem[cur] !== ''
+                && elem[cur] !== null) {
+                  return [...acc, elem[cur]];
+                }
+                return acc;
+              }, []).map((e, i) => (
+                <li key={ i }>
+                  <label
+                    data-testid={ `${i}-ingredient-step` }
+                    htmlFor={ `${i}-ingredient-name-and-measure` }
+                  >
+                    <input
+                      id={ `${i}-ingredient-name-and-measure` }
+                      onChange={ handleCheckboxChange }
+                      type="checkbox"
+                      data-testid={ `${i}-ingredient-name-and-measure` }
+                    />
+                    {`${e} - ${elem[`strMeasure${i + 1}`]}`}
+                  </label>
+                </li>
+              ))}
+            </ul>
             <p data-testid="instructions">{ elem.strInstructions}</p>
             <iframe
               data-testid="video"
@@ -130,7 +159,7 @@ function MealInProgress() {
       <button
         data-testid="finish-recipe-btn"
         className="finishRecipe"
-        disabled={ isDisabled }
+        // disabled={ isDisabled }
         onClick={ finishRecipe }
       >
         Finish Recipe
