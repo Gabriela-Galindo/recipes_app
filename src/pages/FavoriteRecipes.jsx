@@ -64,7 +64,7 @@ function FavoriteRecipes() {
       {
         favorites
         && (
-          fav.map((elem, index) => (
+          fav && fav.map((elem, index) => (
             elem.type === 'drink' ? (
               <div
                 key={ elem.id }
