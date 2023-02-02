@@ -8,39 +8,59 @@ import '../App.css';
 function MealInProgress() {
   const [clickedShare, setClickedShare] = useState(false);
   const [allCheckboxes, setAllCheckboxes] = useState([]);
-  // const [isDisabled, setIsDisabled] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   const { detailsMeals, fetchDetailsMeals } = useContext(FetchMealsContext);
-  // const getStorage = JSON.parse(localStorage.getItem('inProgressRecipes'));
   const history = useHistory();
   const { id } = useParams();
+  let quant = 0;
 
   useEffect(() => {
     const fetchAPI = async () => {
       await fetchDetailsMeals(id);
     };
     fetchAPI();
+    const inProgressRecipes = JSON
+      .parse(localStorage.getItem('inProgressRecipes') || '{}');
+    if (inProgressRecipes.meals[id]) {
+      setAllCheckboxes(inProgressRecipes.meals[id]);
+    }
     const favoritesRecip = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
     const favorite = favoritesRecip.some((e) => e.id === id);
     setIsFavorite(favorite);
-    // console.log(detailsMeals.length);
   }, []);
 
   useEffect(() => {
-    const ingredientsChecked = { meals: {
+    const meals = {
       [id]: allCheckboxes,
-    } };
+    };
     const inProgressRecipes = JSON
-      .parse(localStorage.getItem('inProgressRecipes') || '[]');
-    // inProgressRecipes.push(ingredientsChecked);
-    // const array = inProgressRecipes.meals[id];
-    // array.push(allCheckboxes);
-    localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
-    console.log(ingredientsChecked.meals[id]);
+      .parse(localStorage.getItem('inProgressRecipes') || '{}');
+    localStorage.setItem('inProgressRecipes', JSON.stringify({
+      ...inProgressRecipes,
+      meals,
+    }));
   }, [allCheckboxes]);
 
   const finishRecipe = () => {
-    // req 43 - usar a lógica do botão de favoritar para salvar as receitas feitas no localStorage
+    const date = new Date();
+    const today = date.getDate();
+    const currentMonth = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const fullDate = `${today}/${currentMonth}/${year}`;
+    console.log(detailsMeals);
+    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
+    doneRecipes.push({
+      id,
+      type: 'meal',
+      nationality: detailsMeals[0].strArea,
+      category: detailsMeals[0].strCategory,
+      alcoholicOrNot: '',
+      name: detailsMeals[0].strMeal,
+      image: detailsMeals[0].strMealThumb,
+      doneDate: fullDate,
+      tags: detailsMeals.srtTags,
+    });
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
     history.push('/done-recipes');
   };
 
@@ -70,19 +90,12 @@ function MealInProgress() {
     setIsFavorite(!isFavorite);
   };
 
-  // const handleCheck = ({ target }) => {
-  //   const noMagic4 = 4;
-  //   if (target.checked) setTotalChecked(totalChecked + 1);
-  //   else setTotalChecked(totalChecked - 1);
-  //   if (totalChecked >= noMagic4) setIsDisabled(false);
-  // };
-
   const handleCheckboxChange = ({ target }) => {
-    if (allCheckboxes.includes(target.id)) {
-      const newCheckboxes = allCheckboxes.filter((e) => e !== target.id);
+    if (allCheckboxes.includes(target.name)) {
+      const newCheckboxes = allCheckboxes.filter((e) => e !== target.name);
       setAllCheckboxes(newCheckboxes);
     } else {
-      setAllCheckboxes([...allCheckboxes, target.id]);
+      setAllCheckboxes([...allCheckboxes, target.name]);
     }
   };
 
@@ -107,19 +120,23 @@ function MealInProgress() {
                 && elem[cur] !== null) {
                   return [...acc, elem[cur]];
                 }
+                quant = acc.length;
                 return acc;
               }, []).map((e, i) => (
                 <li key={ i }>
                   <label
                     data-testid={ `${i}-ingredient-step` }
                     htmlFor={ `${i}-ingredient-name-and-measure` }
-                    className={ allCheckboxes
-                      .includes(`${i}-ingredient-name-and-measure`)
+                    className={ allCheckboxes && allCheckboxes
+                      .includes(`${e} - ${elem[`strMeasure${i + 1}`]}`)
                       ? 'ingredient-checked' : '' }
                   >
                     <input
                       id={ `${i}-ingredient-name-and-measure` }
                       onChange={ handleCheckboxChange }
+                      name={ `${e} - ${elem[`strMeasure${i + 1}`]}` }
+                      checked={ allCheckboxes && allCheckboxes
+                        .includes(`${e} - ${elem[`strMeasure${i + 1}`]}`) }
                       type="checkbox"
                       data-testid={ `${i}-ingredient-name-and-measure` }
                     />
@@ -160,7 +177,7 @@ function MealInProgress() {
       <button
         data-testid="finish-recipe-btn"
         className="finishRecipe"
-        // disabled={ isDisabled }
+        disabled={ allCheckboxes && allCheckboxes.length < quant }
         onClick={ finishRecipe }
       >
         Finish Recipe
