@@ -38,6 +38,5 @@ describe.only('Testa o componente Recipes', () => {
 
     const h3 = await screen.findByText('Adam');
     expect(h3).toBeInTheDocument();
-    screen.debug();
   });
 });
