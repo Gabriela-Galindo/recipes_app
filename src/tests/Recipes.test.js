@@ -1,8 +1,7 @@
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
 import renderWithRouter from './helpers/renderWithRouter';
-import Meals from '../pages/Meals';
-import Drinks from '../pages/Drinks';
+import Recipes from '../pages/Recipes';
 import MockMeals from './helpers/MockMeals';
 import MockDrinks from './helpers/Mockdrinks';
 
@@ -16,7 +15,7 @@ describe('Testa a página principal de Receitas', () => {
       json: jest.fn().mockResolvedValue(MockMeals),
     });
 
-    renderWithRouter(<Meals />, { initialEntries: ['/meals'] });
+    renderWithRouter(<Recipes />, { initialEntries: ['/meals'] });
 
     const h3 = await screen.findByText('Big Mac');
     expect(h3).toBeInTheDocument();
@@ -29,7 +28,7 @@ describe('Testa a página principal de Receitas', () => {
       json: jest.fn().mockResolvedValue(MockDrinks),
     });
 
-    renderWithRouter(<Drinks />, { initialEntries: ['/drinks'] });
+    renderWithRouter(<Recipes />, { initialEntries: ['/drinks'] });
     // expect(fetch).toHaveBeenCalledTimes(1);
     const h3 = await screen.findByText('Adam');
     expect(h3).toBeInTheDocument();
@@ -41,7 +40,7 @@ describe('Testa a página principal de Receitas', () => {
     }).mockResolvedValue({
       json: jest.fn().mockResolvedValue(MockMeals),
     });
-    const { history } = renderWithRouter(<Meals />, { initialEntries: ['/meals'] });
+    const { history } = renderWithRouter(<Recipes />, { initialEntries: ['/meals'] });
     const icon = screen.getByTestId('search-top-btn');
     fireEvent.click(icon);
     const input = screen.getByTestId('search-input');

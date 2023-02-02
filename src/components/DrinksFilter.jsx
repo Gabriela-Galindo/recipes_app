@@ -1,18 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { FetchDrinksContext } from '../context/FetchDrinksContext';
 
 function DrinksFilter() {
   const {
     searchCategory,
-    searchDrinks,
     fetchCategoryDrinksAPI,
     fetchDrinksAPI,
   } = useContext(FetchDrinksContext);
   const [prevClicked, setPrevCliked] = useState('All');
   const noMagic5 = 5;
   const categoryData = searchCategory.slice(0, noMagic5);
-  const history = useHistory();
 
   useEffect(() => {
     const fetch = async () => {
@@ -30,11 +27,6 @@ function DrinksFilter() {
       setPrevCliked(param);
     }
   };
-
-  if (searchDrinks.length === 1) {
-    const { idDrink } = searchDrinks[0];
-    history.push(`/drinks/${idDrink}`);
-  }
 
   return (
     <div>

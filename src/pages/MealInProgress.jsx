@@ -3,19 +3,17 @@ import { useHistory, useParams } from 'react-router-dom';
 import { FetchMealsContext } from '../context/FetchMealsContext';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import '../App.css';
 
 function MealInProgress() {
   const [clickedShare, setClickedShare] = useState(false);
-  const [allCheckboxes, setAllCheckboxes] = useState({});
+  const [allCheckboxes, setAllCheckboxes] = useState([]);
   // const [isDisabled, setIsDisabled] = useState(true);
-  // const [totalChecked, setTotalChecked] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const { detailsMeals, fetchDetailsMeals } = useContext(FetchMealsContext);
   // const getStorage = JSON.parse(localStorage.getItem('inProgressRecipes'));
   const history = useHistory();
   const { id } = useParams();
-  // console.log(id);
-  // console.log(detailsMeals);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -25,15 +23,20 @@ function MealInProgress() {
     const favoritesRecip = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
     const favorite = favoritesRecip.some((e) => e.id === id);
     setIsFavorite(favorite);
+    // console.log(detailsMeals.length);
   }, []);
 
   useEffect(() => {
-    // const recipeId = id;
-    // const inProgressRecipes = JSON
-    //   .parse(localStorage.getItem('inProgressRecipes') || '[]');
-    // inProgressRecipes.push(allCheckboxes);
-    // localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
-    console.log(allCheckboxes);
+    const ingredientsChecked = { meals: {
+      [id]: allCheckboxes,
+    } };
+    const inProgressRecipes = JSON
+      .parse(localStorage.getItem('inProgressRecipes') || '[]');
+    // inProgressRecipes.push(ingredientsChecked);
+    // const array = inProgressRecipes.meals[id];
+    // array.push(allCheckboxes);
+    localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
+    console.log(ingredientsChecked.meals[id]);
   }, [allCheckboxes]);
 
   const finishRecipe = () => {
@@ -42,7 +45,7 @@ function MealInProgress() {
   };
 
   const share = () => {
-    const link = `http://localhost:3000/meals/${id}/in-progress`;
+    const link = `http://localhost:3000/meals/${id}`;
     setClickedShare(true);
     navigator.clipboard.writeText(link);
   };
@@ -75,17 +78,12 @@ function MealInProgress() {
   // };
 
   const handleCheckboxChange = ({ target }) => {
-    setAllCheckboxes({
-      ...allCheckboxes,
-      [target.id]: target.checked,
-    });
-    const inProgressRecipes = JSON
-      .parse(localStorage.getItem('inProgressRecipes') || '[]');
-    inProgressRecipes.push({ [id]: [{
-      ...allCheckboxes,
-      [target.id]: target.checked,
-    }] });
-    localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
+    if (allCheckboxes.includes(target.id)) {
+      const newCheckboxes = allCheckboxes.filter((e) => e !== target.id);
+      setAllCheckboxes(newCheckboxes);
+    } else {
+      setAllCheckboxes([...allCheckboxes, target.id]);
+    }
   };
 
   return (
@@ -115,6 +113,9 @@ function MealInProgress() {
                   <label
                     data-testid={ `${i}-ingredient-step` }
                     htmlFor={ `${i}-ingredient-name-and-measure` }
+                    className={ allCheckboxes
+                      .includes(`${i}-ingredient-name-and-measure`)
+                      ? 'ingredient-checked' : '' }
                   >
                     <input
                       id={ `${i}-ingredient-name-and-measure` }
