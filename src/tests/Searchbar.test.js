@@ -40,17 +40,6 @@ describe('Testa o componente Search Bar', () => {
     expect(search).toBeInTheDocument();
   });
 
-  // it('Testa se dispara um alert quando o input está vazio', async () => {
-  //   global.alert = jest.fn();
-  //   renderWithRouter(<SearchIcon />, { initialEntries: ['/meals'] });
-  //   const input = screen.getByTestId(searchInput);
-  //   const search = screen.getByTestId(buttonSearch);
-  //   fireEvent.change(input, { target: { value: '' } });
-  //   fireEvent.click(search);
-
-  //   expect(global.alert).toHaveBeenCalledWith(oneChar);
-  // });
-
   it('Testa se dispara um alert quando a pesquisa é pela primeira letra, mas há mais de uma letra no input', async () => {
     global.alert = jest.fn();
     renderWithRouter(<SearchIcon />, { initialEntries: ['/meals'] });
