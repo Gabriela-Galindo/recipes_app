@@ -15,19 +15,20 @@ function Drinks() {
     fetch();
   }, []);
 
-  const card = (
-    <div>
-      <DrinksFilter />
-      <RenderDrinkCard result={ searchDrinks } />
-    </div>
-  );
+  // const card = (
+  //   <div>
+  //     <DrinksFilter />
+  //     <RenderDrinkCard result={ searchDrinks } />
+  //   </div>
+  // );
 
   return (
     <div>
       <Header />
+      <DrinksFilter />
       { searchDrinks === null
         ? global.alert('Sorry, we haven\'t found any recipes for these filters.')
-        : card }
+        : <RenderDrinkCard result={ searchDrinks } /> }
       <Footer />
     </div>
   );
