@@ -10,6 +10,8 @@ function DoneRecipes() {
   const [fav, setFav] = useState(doneRecipes);
   const history = useHistory();
 
+  console.log(fav);
+
   function handleClick(value) {
     setFav(value === 'all' ? doneRecipes : doneRecipes
       .filter((elem) => elem.type === value));
@@ -99,61 +101,61 @@ function DoneRecipes() {
                 </button>
                 { clickedShare && <p>Link copied!</p> }
               </div>
-            )
-              : (
-                <div
-                  key={ elem.id }
+            ) : (
+              <div
+                key={ elem.id }
+              >
+                <button
+                  type="button"
+                  src={ elem.image }
+                  onClick={ () => redirect(elem.type, elem.id) }
                 >
-                  <button
-                    type="button"
+                  <img
+                    data-testid={ `${index}-horizontal-image` }
                     src={ elem.image }
-                    onClick={ () => redirect(elem.type, elem.id) }
+                    alt={ elem.name }
+                    height="100px"
+                    width="100px"
+                  />
+                  <h1
+                    data-testid={ `${index}-horizontal-name` }
                   >
-                    <img
-                      data-testid={ `${index}-horizontal-image` }
-                      src={ elem.image }
-                      alt={ elem.name }
-                      height="100px"
-                      width="100px"
-                    />
-                    <h1
-                      data-testid={ `${index}-horizontal-name` }
+                    { elem.name }
+                  </h1>
+                </button>
+                <h3
+                  data-testid={ `${index}-horizontal-top-text` }
+                >
+                  { `${elem.nationality} - ${elem.category}` }
+                </h3>
+                <h4
+                  data-testid={ `${index}-horizontal-done-date` }
+                >
+                  { elem.doneDate }
+                </h4>
+                {
+                  elem.tags.map((e) => (
+                    <p
+                      key={ e }
+                      data-testid={ `${index}-${e}-horizontal-tag` }
                     >
-                      { elem.name }
-                    </h1>
-                  </button>
-                  <h3
-                    data-testid={ `${index}-horizontal-top-text` }
-                  >
-                    { `${elem.nationality} - ${elem.category}` }
-                  </h3>
-                  <h4
-                    data-testid={ `${index}-horizontal-done-date` }
-                  >
-                    { elem.doneDate }
-                  </h4>
-                  {
-                    elem.tags.map((e) => (
-                      <p
-                        key={ e }
-                        data-testid={ `${index}-${e}-horizontal-tag` }
-                      >
-                        { e }
-                      </p>
-                    ))
-                  }
-                  <button
-                    data-testid={ `${index}-horizontal-share-btn` }
-                    onClick={ () => share(elem.type, elem.id) }
+                      { e }
+                    </p>
+                  ))
+                }
+                <button
+                  data-testid={ `${index}-horizontal-share-btn` }
+                  onClick={ () => share(elem.type, elem.id) }
+                  src={ shareIcon }
+                >
+                  <img
                     src={ shareIcon }
-                  >
-                    <img
-                      src={ shareIcon }
-                      alt="Ícone de compartilhamento"
-                    />
-                  </button>
-                  { clickedShare && <p>Link copied!</p> }
-                </div>)
+                    alt="Ícone de compartilhamento"
+                  />
+                </button>
+                { clickedShare && <p>Link copied!</p> }
+              </div>
+            )
           ))
         )
       }
