@@ -21,12 +21,20 @@ function DrinkInProgress() {
       await fetchDetailsDrinks(id);
     };
     fetchAPI();
-    const inProgressRecipes = JSON
-      .parse(localStorage.getItem('inProgressRecipes') || '{}');
-    if (inProgressRecipes.drinks) {
-      setAllCheckboxes(inProgressRecipes.drinks[id]);
+    const obj = {
+      drinks: {
+        [id]: allCheckboxes,
+      },
+    };
+    const type = 'drinks';
+    if (localStorage.inProgressRecipes) {
+      const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+      const ids = Object.keys(inProgressRecipes.drinks);
+      if (ids.includes(id)) {
+        setAllCheckboxes(inProgressRecipes[type][id]);
+      }
     } else {
-      setAllCheckboxes([]);
+      localStorage.setItem('inProgressRecipes', JSON.stringify({ ...obj }));
     }
     const favoritesRecip = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
     const favorite = favoritesRecip.some((e) => e.id === id);
@@ -34,15 +42,10 @@ function DrinkInProgress() {
   }, []);
 
   useEffect(() => {
-    const drinks = {
-      [id]: allCheckboxes,
-    };
-    const inProgressRecipes = JSON
-      .parse(localStorage.getItem('inProgressRecipes') || '{}');
-    localStorage.setItem('inProgressRecipes', JSON.stringify({
-      ...inProgressRecipes,
-      drinks,
-    }));
+    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    const inProgressRecipesType = inProgressRecipes.drinks;
+    inProgressRecipes.drinks = { ...inProgressRecipesType, [id]: allCheckboxes };
+    localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
   }, [allCheckboxes]);
 
   const finishRecipe = () => {
