@@ -21,8 +21,10 @@ function MealInProgress() {
     fetchAPI();
     const inProgressRecipes = JSON
       .parse(localStorage.getItem('inProgressRecipes') || '{}');
-    if (inProgressRecipes.meals[id]) {
+    if (inProgressRecipes.meals) {
       setAllCheckboxes(inProgressRecipes.meals[id]);
+    } else {
+      setAllCheckboxes([]);
     }
     const favoritesRecip = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
     const favorite = favoritesRecip.some((e) => e.id === id);
@@ -42,12 +44,6 @@ function MealInProgress() {
   }, [allCheckboxes]);
 
   const finishRecipe = () => {
-    const date = new Date();
-    const today = date.getDate();
-    const currentMonth = date.getMonth() + 1;
-    const year = date.getFullYear();
-    const fullDate = `${today}/${currentMonth}/${year}`;
-    console.log(detailsMeals);
     const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
     doneRecipes.push({
       id,
@@ -57,8 +53,8 @@ function MealInProgress() {
       alcoholicOrNot: '',
       name: detailsMeals[0].strMeal,
       image: detailsMeals[0].strMealThumb,
-      doneDate: fullDate,
-      tags: detailsMeals.srtTags,
+      doneDate: new Date(),
+      tags: detailsMeals[0].strTags.split(','),
     });
     localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
     history.push('/done-recipes');
