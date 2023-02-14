@@ -1,35 +1,33 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { FetchDrinksContext } from '../context/FetchDrinksContext';
+import { FetchMealsContext } from '../context/FetchMealsContext';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import '../App.css';
 
-function DrinkInProgress() {
+function MealInProgress() {
   const [clickedShare, setClickedShare] = useState(false);
   const [allCheckboxes, setAllCheckboxes] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
-  const { detailsDrinks, fetchDetailsDrinks } = useContext(FetchDrinksContext);
+  const { detailsMeals, fetchDetailsMeals } = useContext(FetchMealsContext);
   const history = useHistory();
   const { id } = useParams();
   let quant = 0;
 
-  console.log(detailsDrinks);
-
   useEffect(() => {
     const fetchAPI = async () => {
-      await fetchDetailsDrinks(id);
+      await fetchDetailsMeals(id);
     };
     fetchAPI();
     const obj = {
-      drinks: {
+      meals: {
         [id]: allCheckboxes,
       },
     };
-    const type = 'drinks';
+    const type = 'meals';
     if (localStorage.inProgressRecipes) {
       const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-      const ids = Object.keys(inProgressRecipes.drinks);
+      const ids = Object.keys(inProgressRecipes.meals ? inProgressRecipes.meals : obj);
       if (ids.includes(id)) {
         setAllCheckboxes(inProgressRecipes[type][id]);
       }
@@ -43,8 +41,8 @@ function DrinkInProgress() {
 
   useEffect(() => {
     const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    const inProgressRecipesType = inProgressRecipes.drinks;
-    inProgressRecipes.drinks = { ...inProgressRecipesType, [id]: allCheckboxes };
+    const inProgressRecipesType = inProgressRecipes.meals;
+    inProgressRecipes.meals = { ...inProgressRecipesType, [id]: allCheckboxes };
     localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
   }, [allCheckboxes]);
 
@@ -52,21 +50,21 @@ function DrinkInProgress() {
     const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
     doneRecipes.push({
       id,
-      type: 'drink',
-      nationality: '',
-      category: detailsDrinks[0].strCategory,
-      alcoholicOrNot: detailsDrinks[0].strAlcoholic,
-      name: detailsDrinks[0].strDrink,
-      image: detailsDrinks[0].strDrinkThumb,
+      type: 'meal',
+      nationality: detailsMeals[0].strArea,
+      category: detailsMeals[0].strCategory,
+      alcoholicOrNot: '',
+      name: detailsMeals[0].strMeal,
+      image: detailsMeals[0].strMealThumb,
       doneDate: new Date(),
-      tags: [],
+      tags: detailsMeals[0].strTags.split(','),
     });
     localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
     history.push('/done-recipes');
   };
 
   const share = () => {
-    const link = `http://localhost:3000/drinks/${id}`;
+    const link = `http://localhost:3000/meals/${id}`;
     setClickedShare(true);
     navigator.clipboard.writeText(link);
   };
@@ -75,13 +73,13 @@ function DrinkInProgress() {
     const favoritesRecipes = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
     if (!isFavorite) {
       favoritesRecipes.push({
-        id: elem.idDrink,
-        type: 'drink',
-        nationality: '',
+        id: elem.idMeal,
+        type: 'meal',
+        nationality: elem.strArea,
         category: elem.strCategory,
-        alcoholicOrNot: elem.strAlcoholic,
-        name: elem.strDrink,
-        image: elem.strDrinkThumb,
+        alcoholicOrNot: '',
+        name: elem.strMeal,
+        image: elem.strMealThumb,
       });
       localStorage.setItem('favoriteRecipes', JSON.stringify(favoritesRecipes));
     } else {
@@ -100,20 +98,25 @@ function DrinkInProgress() {
     }
   };
 
+  const linkToYoutube = (link) => {
+    const newLink = link.split('=');
+    return (`https://www.youtube.com/embed/${newLink[1]}`);
+  };
+
   return (
     <div>
       {
-        detailsDrinks.map((elem) => (
-          <div key={ elem.idDrink }>
+        detailsMeals.map((elem) => (
+          <div key={ elem.idMeal }>
             <img
-              src={ elem.strDrinkThumb }
-              alt={ elem.strDrink }
+              src={ elem.strMealThumb }
+              alt={ elem.strMeal }
               data-testid="recipe-photo"
               height="200px"
               width="200px"
             />
-            <h1 data-testid="recipe-title">{ elem.strDrink }</h1>
-            <h3 data-testid="recipe-category">{ elem.strAlcoholic }</h3>
+            <h1 data-testid="recipe-title">{ elem.strMeal }</h1>
+            <h3 data-testid="recipe-category">{ elem.strCategory }</h3>
             <ul>
               {Object.keys(elem).reduce((acc, cur) => {
                 if (cur.includes('Ingredient')
@@ -147,6 +150,14 @@ function DrinkInProgress() {
               ))}
             </ul>
             <p data-testid="instructions">{ elem.strInstructions}</p>
+            <iframe
+              data-testid="video"
+              title="recipe"
+              width="280px"
+              height="280px"
+              // src={ `https://www.youtube.com/embed/${elem.strYoutube}` }
+              src={ linkToYoutube(elem.strYoutube) }
+            />
             <button
               data-testid="share-btn"
               onClick={ share }
@@ -162,7 +173,7 @@ function DrinkInProgress() {
             >
               <img
                 src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
-                alt={ elem.strDrink }
+                alt={ elem.strMeal }
               />
             </button>
           </div>
@@ -180,4 +191,4 @@ function DrinkInProgress() {
   );
 }
 
-export default DrinkInProgress;
+export default MealInProgress;

@@ -10,7 +10,7 @@ function DoneRecipes() {
   const [fav, setFav] = useState(doneRecipes);
   const history = useHistory();
 
-  console.log(fav);
+  // console.log(fav);
 
   function handleClick(value) {
     setFav(value === 'all' ? doneRecipes : doneRecipes
@@ -64,6 +64,7 @@ function DoneRecipes() {
                 <button
                   type="button"
                   src={ elem.image }
+                  data-testid="redirect-btn"
                   onClick={ () => redirect(elem.type, elem.id) }
                 >
                   <img
@@ -108,6 +109,7 @@ function DoneRecipes() {
                 <button
                   type="button"
                   src={ elem.image }
+                  data-testid="redirect-btn"
                   onClick={ () => redirect(elem.type, elem.id) }
                 >
                   <img

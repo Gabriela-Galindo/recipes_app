@@ -59,6 +59,11 @@ function DetailsMeals() {
     setIsFavorite(!isFavorite);
   };
 
+  const linkToYoutube = (link) => {
+    const newLink = link.split('=');
+    return (`https://www.youtube.com/embed/${newLink[1]}`);
+  };
+
   const noMagic = 6;
   const recomendation = recomendationDrinks.slice(0, noMagic);
 
@@ -99,7 +104,8 @@ function DetailsMeals() {
               title="recipe"
               width="280px"
               height="280px"
-              src={ `https://www.youtube.com/embed/${elem.strYoutube}` }
+              // src={ `https://www.youtube.com/embed/${elem.strYoutube}` }
+              src={ linkToYoutube(elem.strYoutube) }
             />
             <button
               data-testid="share-btn"
@@ -122,7 +128,6 @@ function DetailsMeals() {
           </div>
         ))
       }
-      {/* <Recomendations /> */}
       <h3>Recomendações</h3>
       <Carousel>
         {
