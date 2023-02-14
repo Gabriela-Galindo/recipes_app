@@ -7,8 +7,6 @@ function RenderDrinkCard({ result }) {
   const data = result.slice(0, noMagic12);
   const history = useHistory();
 
-  console.log(result);
-
   if (result.length === 1) {
     const { idDrink } = result[0];
     history.push(`/drinks/${idDrink}`);
@@ -22,7 +20,7 @@ function RenderDrinkCard({ result }) {
     <div>
       {data.map((e, index) => (
         <button
-          key={ index }
+          key={ e.idDrink + index }
           onClick={ () => handleClick(e.idDrink) }
         >
           <div

@@ -7,11 +7,12 @@ import MockDrinks from './helpers/Mockdrinks';
 
 describe('Testa a página principal de Receitas', () => {
   it('Testa se chama a API ao renderizar a página', async () => {
-    // const mockFetchMealsAPI = jest.fn();
-    // jest
-    //   .spyOn(FetchMealsContext, 'useContext')
-    //   .mockImplementation(() => ({ fetchMealsAPI: mockFetchMealsAPI }));
+    // jest.spyOn(global, 'fetch').mockResolvedValueOnce({
+    //   json: jest.fn().mockResolvedValue(MockMeals),
+    // });
     jest.spyOn(global, 'fetch').mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValue(MockMeals),
+    }).mockResolvedValue({
       json: jest.fn().mockResolvedValue(MockMeals),
     });
 
@@ -50,7 +51,7 @@ describe('Testa a página principal de Receitas', () => {
     fireEvent.change(input, { target: { value: 'Big Mac' } });
     fireEvent.click(name);
     fireEvent.click(searchButton);
-    screen.debug();
+    // screen.debug();
 
     const { pathname } = history.location;
     setTimeout(() => { expect(pathname).toBe('/meals/53013'); }, 5000);

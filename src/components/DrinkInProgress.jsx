@@ -1,33 +1,33 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { FetchMealsContext } from '../context/FetchMealsContext';
+import { FetchDrinksContext } from '../context/FetchDrinksContext';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import '../App.css';
 
-function MealInProgress() {
+function DrinkInProgress() {
   const [clickedShare, setClickedShare] = useState(false);
   const [allCheckboxes, setAllCheckboxes] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
-  const { detailsMeals, fetchDetailsMeals } = useContext(FetchMealsContext);
+  const { detailsDrinks, fetchDetailsDrinks } = useContext(FetchDrinksContext);
   const history = useHistory();
   const { id } = useParams();
   let quant = 0;
 
   useEffect(() => {
     const fetchAPI = async () => {
-      await fetchDetailsMeals(id);
+      await fetchDetailsDrinks(id);
     };
     fetchAPI();
     const obj = {
-      meals: {
+      drinks: {
         [id]: allCheckboxes,
       },
     };
-    const type = 'meals';
+    const type = 'drinks';
     if (localStorage.inProgressRecipes) {
       const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-      const ids = Object.keys(inProgressRecipes.meals);
+      const ids = Object.keys(inProgressRecipes.drinks ? inProgressRecipes.drinks : obj);
       if (ids.includes(id)) {
         setAllCheckboxes(inProgressRecipes[type][id]);
       }
@@ -41,8 +41,8 @@ function MealInProgress() {
 
   useEffect(() => {
     const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    const inProgressRecipesType = inProgressRecipes.meals;
-    inProgressRecipes.meals = { ...inProgressRecipesType, [id]: allCheckboxes };
+    const inProgressRecipesType = inProgressRecipes.drinks;
+    inProgressRecipes.drinks = { ...inProgressRecipesType, [id]: allCheckboxes };
     localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
   }, [allCheckboxes]);
 
@@ -50,21 +50,21 @@ function MealInProgress() {
     const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
     doneRecipes.push({
       id,
-      type: 'meal',
-      nationality: detailsMeals[0].strArea,
-      category: detailsMeals[0].strCategory,
-      alcoholicOrNot: '',
-      name: detailsMeals[0].strMeal,
-      image: detailsMeals[0].strMealThumb,
+      type: 'drink',
+      nationality: '',
+      category: detailsDrinks[0].strCategory,
+      alcoholicOrNot: detailsDrinks[0].strAlcoholic,
+      name: detailsDrinks[0].strDrink,
+      image: detailsDrinks[0].strDrinkThumb,
       doneDate: new Date(),
-      tags: detailsMeals[0].strTags.split(','),
+      tags: [],
     });
     localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
     history.push('/done-recipes');
   };
 
   const share = () => {
-    const link = `http://localhost:3000/meals/${id}`;
+    const link = `http://localhost:3000/drinks/${id}`;
     setClickedShare(true);
     navigator.clipboard.writeText(link);
   };
@@ -73,13 +73,13 @@ function MealInProgress() {
     const favoritesRecipes = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
     if (!isFavorite) {
       favoritesRecipes.push({
-        id: elem.idMeal,
-        type: 'meal',
-        nationality: elem.strArea,
+        id: elem.idDrink,
+        type: 'drink',
+        nationality: '',
         category: elem.strCategory,
-        alcoholicOrNot: '',
-        name: elem.strMeal,
-        image: elem.strMealThumb,
+        alcoholicOrNot: elem.strAlcoholic,
+        name: elem.strDrink,
+        image: elem.strDrinkThumb,
       });
       localStorage.setItem('favoriteRecipes', JSON.stringify(favoritesRecipes));
     } else {
@@ -101,17 +101,17 @@ function MealInProgress() {
   return (
     <div>
       {
-        detailsMeals.map((elem) => (
-          <div key={ elem.idMeal }>
+        detailsDrinks.map((elem) => (
+          <div key={ elem.idDrink }>
             <img
-              src={ elem.strMealThumb }
-              alt={ elem.strMeal }
+              src={ elem.strDrinkThumb }
+              alt={ elem.strDrink }
               data-testid="recipe-photo"
               height="200px"
               width="200px"
             />
-            <h1 data-testid="recipe-title">{ elem.strMeal }</h1>
-            <h3 data-testid="recipe-category">{ elem.strCategory }</h3>
+            <h1 data-testid="recipe-title">{ elem.strDrink }</h1>
+            <h3 data-testid="recipe-category">{ elem.strAlcoholic }</h3>
             <ul>
               {Object.keys(elem).reduce((acc, cur) => {
                 if (cur.includes('Ingredient')
@@ -145,13 +145,6 @@ function MealInProgress() {
               ))}
             </ul>
             <p data-testid="instructions">{ elem.strInstructions}</p>
-            <iframe
-              data-testid="video"
-              title="recipe"
-              width="280px"
-              height="280px"
-              src={ `https://www.youtube.com/embed/${elem.strYoutube}` }
-            />
             <button
               data-testid="share-btn"
               onClick={ share }
@@ -167,7 +160,7 @@ function MealInProgress() {
             >
               <img
                 src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
-                alt={ elem.strMeal }
+                alt={ elem.strDrink }
               />
             </button>
           </div>
@@ -185,4 +178,4 @@ function MealInProgress() {
   );
 }
 
-export default MealInProgress;
+export default DrinkInProgress;
